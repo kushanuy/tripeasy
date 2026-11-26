@@ -3,6 +3,7 @@ app.py - the website (Flask). Run with:  python app.py   then open http://127.0.
 """
 from datetime import date
 from functools import wraps
+import os
 
 from flask import Flask, flash, redirect, render_template, request, session, url_for
 
@@ -12,7 +13,7 @@ from booking import BookingError, BookingSystem, CABINS, CITIES, MAX_TRAVELLERS
 
 def create_app(storage_path=None, accounts_path=None):
     app = Flask(__name__)
-    app.secret_key = "school-project-secret"      # needed for flash messages
+    app.secret_key = os.environ.get("SECRET_KEY", "dev-only-change-me")
     system = BookingSystem(storage_path)
     app.config["SYSTEM"] = system
     accounts = AccountStore(accounts_path)
@@ -163,5 +164,15 @@ def create_app(storage_path=None, accounts_path=None):
     return app
 
 
+app = create_app(
+    os.environ.get("BOOKINGS_PATH", "bookings.json"),
+    os.environ.get("ACCOUNTS_PATH", "accounts.json"),
+)
+
+
 if __name__ == "__main__":
-    create_app("bookings.json", "accounts.json").run(debug=True)
+    app.run(
+        host="0.0.0.0",
+        port=int(os.environ.get("PORT", "5000")),
+        debug=os.environ.get("FLASK_DEBUG") == "1",
+    )

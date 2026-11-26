@@ -5,7 +5,14 @@
 pip install -r requirements.txt
 python app.py
 ```
-Open  in your browser.
+Open http://127.0.0.1:5000 in your browser.
+
+## Deploy to Render
+1. Push this repository to GitHub.
+2. In Render, choose **New → Blueprint** and select the repository.
+3. Render reads `render.yaml`, installs `requirements.txt`, and starts the app with Gunicorn. The secret key is generated automatically.
+
+The included free web service uses local JSON files for bookings and accounts. Render's free filesystem is ephemeral, so those records can be lost when the service restarts or redeploys. Use a persistent disk or external database before relying on this for real bookings.
 
 ## Run the tests
 ```
