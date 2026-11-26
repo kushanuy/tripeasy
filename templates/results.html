@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %}{{ q.origin }} to {{ q.destination }}{% endblock %}
+
+{% block content %}
+<h2>{{ q.origin }} → {{ q.destination }}</h2>
+<p class="muted">{{ q.date }} · {{ q.travellers }} traveller(s) · {{ q.cabin }}</p>
+
+{% if results %}
+  {% for f, left, price in results %}
+  <div class="flight-card">
+    <div class="airline"><strong>{{ f.airline }}</strong><br><small>{{ f.flight_id }}</small></div>
+    <div class="time"><strong>{{ f.dep_time }}</strong><br><small>{{ f.origin }}</small></div>
+    <div class="duration">{{ f.duration_text }}<br><small>Non-stop</small></div>
+    <div class="time"><strong>{{ f.arr_time }}</strong><br><small>{{ f.destination }}</small></div>
+    <div class="price">
+      <strong>₹{{ "{:,}".format(price) }}</strong><br><small>per person</small>
+      {% if left <= 5 %}<br><span class="few">Only {{ left }} seats left!</span>{% endif %}
+    </div>
+    <a class="btn" href="{{ url_for('book_form', flight_id=f.flight_id, date=q.date, travellers=q.travellers, cabin=q.cabin) }}">BOOK NOW</a>
+  </div>
+  {% endfor %}
+{% else %}
+  <div class="flash error">No flights found with enough seats. Try another date or fewer travellers.</div>
+{% endif %}
+<p><a href="{{ url_for('home') }}">← Modify search</a></p>
+{% endblock %}

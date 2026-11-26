@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}My Trips{% endblock %}
+
+{% block content %}
+<h2>Manage your booking</h2>
+<form class="panel" method="post">
+  <div class="row">
+    <input name="pnr" placeholder="PNR (e.g. AB12CD)" required>
+    <input name="email" type="email" placeholder="Email used while booking" value="{{ user }}" required>
+    <button class="btn" type="submit">FIND BOOKING</button>
+  </div>
+</form>
+
+{% if b %}
+<div class="panel">
+  <h3>{{ flight.origin }} → {{ flight.destination }}
+    <span class="badge {{ b.status|lower }}">{{ b.status }}</span></h3>
+  <p>{{ flight.airline }} {{ flight.flight_id }} · {{ b.travel_date }} · {{ flight.dep_time }} · {{ b.cabin }}</p>
+  <ul>{% for p in b.passengers %}<li>{{ p.name }} ({{ p.age }}, {{ p.gender }})</li>{% endfor %}</ul>
+  <p><strong>Fare: ₹{{ "{:,}".format(b.total_fare) }}</strong>
+     {% if b.status == 'CANCELLED' %} · Refund: ₹{{ "{:,}".format(b.refund) }}{% endif %}</p>
+  {% if b.status == 'CONFIRMED' %}
+  <form method="post" action="{{ url_for('cancel') }}">
+    <input type="hidden" name="pnr" value="{{ b.pnr }}">
+    <input type="hidden" name="email" value="{{ b.email }}">
+    <button class="btn danger" type="submit">CANCEL BOOKING</button>
+  </form>
+  {% endif %}
+</div>
+{% endif %}
+{% endblock %}

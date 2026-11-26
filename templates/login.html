@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block title %}Login – TripEasy{% endblock %}
+
+{% block content %}
+<form class="panel login-box" method="post">
+  <h2>Login to continue</h2>
+  <p class="muted">Log in to book flights. Your saved details will fill the booking form for you.</p>
+  <input type="hidden" name="next" value="{{ next }}">
+  <div class="row"><input name="email" type="email" placeholder="Email" required autofocus></div>
+  <div class="row"><input name="password" type="password" placeholder="Password" required></div>
+  <button class="btn" type="submit">LOGIN</button>
+  <p class="{{ 'flash error' if no_account }}">New to TripEasy?
+    <a href="{{ url_for('signup', next=next) }}">Create an account</a></p>
+</form>
+{% endblock %}

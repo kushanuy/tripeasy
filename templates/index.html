@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block title %}TripEasy – Book Flights{% endblock %}
+
+{% block hero %}
+<section class="hero">
+  <h1>Book Domestic Flights</h1>
+  <p>Search, book and cancel in a few clicks</p>
+
+  <form class="search-card" action="{{ url_for('search') }}" method="get">
+    <div class="field">
+      <label for="origin">FROM</label>
+      <select id="origin" name="origin" required>
+        {% for c in cities %}<option {{ 'selected' if c == 'Bengaluru' }}>{{ c }}</option>{% endfor %}
+      </select>
+    </div>
+    <div class="field">
+      <label for="destination">TO</label>
+      <select id="destination" name="destination" required>
+        {% for c in cities %}<option {{ 'selected' if c == 'Delhi' }}>{{ c }}</option>{% endfor %}
+      </select>
+    </div>
+    <div class="field">
+      <label for="date">DEPARTURE</label>
+      <input id="date" type="date" name="date" min="{{ today }}" value="{{ today }}" required>
+    </div>
+    <div class="field">
+      <label for="travellers">TRAVELLERS</label>
+      <input id="travellers" type="number" name="travellers" min="1" max="{{ max_travellers }}" value="1" required>
+    </div>
+    <div class="field">
+      <label for="cabin">CLASS</label>
+      <select id="cabin" name="cabin">
+        {% for c in cabins %}<option>{{ c }}</option>{% endfor %}
+      </select>
+    </div>
+    <button class="btn-search" type="submit">SEARCH</button>
+  </form>
+</section>
+{% endblock %}
+
+{% block content %}
+<section class="offers">
+  <div class="offer"><h3>🏷 Cheapest first</h3><p>Results are always sorted by lowest fare.</p></div>
+  <div class="offer"><h3>🔒 Safe booking</h3><p>Manage your trip using only your PNR and email.</p></div>
+  <div class="offer"><h3>💸 Easy refunds</h3><p>90% back if you cancel 24+ hours before departure.</p></div>
+</section>
+{% endblock %}

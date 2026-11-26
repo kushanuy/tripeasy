@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block title %}Traveller Details{% endblock %}
+
+{% block content %}
+<h2>Review your booking</h2>
+<div class="flight-card summary">
+  <div><strong>{{ flight.airline }}</strong> {{ flight.flight_id }}</div>
+  <div>{{ flight.origin }} {{ flight.dep_time }} → {{ flight.destination }} {{ flight.arr_time }}</div>
+  <div>{{ date }} · {{ cabin }}</div>
+  <div class="price"><strong>₹{{ "{:,}".format(price * n) }}</strong><br><small>{{ n }} × ₹{{ "{:,}".format(price) }}</small></div>
+</div>
+
+<form class="panel" method="post">
+  <input type="hidden" name="date" value="{{ date }}">
+  <input type="hidden" name="cabin" value="{{ cabin }}">
+  <input type="hidden" name="travellers" value="{{ n }}">
+
+  <h3>Traveller details</h3>
+  {% for i in range(n) %}
+  <div class="row">
+    <span class="num">{{ i + 1 }}</span>
+    {% set me = profile if i == 0 else None %}
+    <input name="name{{ i }}" placeholder="Full name" value="{{ me.name if me }}" required>
+    <input name="age{{ i }}" type="number" placeholder="Age" min="0" max="120" value="{{ me.age if me }}" required>
+    <select name="gender{{ i }}" required>
+      <option value="">Gender</option>
+      {% for g in ['Male', 'Female', 'Other'] %}<option {{ 'selected' if me and me.gender == g }}>{{ g }}</option>{% endfor %}
+    </select>
+  </div>
+  {% endfor %}
+
+  <h3>Contact details</h3>
+  <div class="row">
+    <input name="email" type="email" value="{{ user }}" readonly title="Bookings are linked to your login email">
+    <input name="phone" placeholder="10-digit mobile number" value="{{ profile.phone if profile }}" required>
+  </div>
+  <button class="btn" type="submit">CONFIRM &amp; PAY ₹{{ "{:,}".format(price * n) }}</button>
+  <p class="muted">Payment is simulated – no real money is charged.</p>
+</form>
+{% endblock %}

@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}Booking Confirmed{% endblock %}
+
+{% block content %}
+<div class="panel center">
+  <h2 class="ok">✅ Booking Confirmed!</h2>
+  <p>Your PNR</p>
+  <div class="pnr">{{ b.pnr }}</div>
+  <p class="muted">Save this PNR and your email to manage the trip later.</p>
+</div>
+
+<div class="panel">
+  <h3>{{ flight.origin }} → {{ flight.destination }}</h3>
+  <p>{{ flight.airline }} {{ flight.flight_id }} · {{ b.travel_date }} · {{ flight.dep_time }} – {{ flight.arr_time }} · {{ b.cabin }}</p>
+  <table>
+    <tr><th>#</th><th>Name</th><th>Age</th><th>Gender</th></tr>
+    {% for p in b.passengers %}
+    <tr><td>{{ loop.index }}</td><td>{{ p.name }}</td><td>{{ p.age }}</td><td>{{ p.gender }}</td></tr>
+    {% endfor %}
+  </table>
+  <p><strong>Total paid: ₹{{ "{:,}".format(b.total_fare) }}</strong></p>
+  <p class="muted">Contact details: {{ b.email }} · {{ b.phone }}</p>
+  <a class="btn" href="{{ url_for('home') }}">Book another flight</a>
+</div>
+{% endblock %}
