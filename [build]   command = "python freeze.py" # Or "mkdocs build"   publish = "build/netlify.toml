@@ -1,4 +1,0 @@
-[build]
-  command = "python app.py" # Or "mkdocs build"
-  publish = "templates/"           # Folder containing generated HTML
-  environment = { PYTHON_VERSION = "3.13" }
